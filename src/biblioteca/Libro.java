@@ -10,6 +10,7 @@ public class Libro {
     private long isbn;
     private int edicion;
     private String formato;
+    private int copias;
 
     public Libro(String titulo, Autor autor, Fecha fechaPublicacion, long isbn, int edicion, String formato) {
         this.titulo = titulo != null ? titulo : "sin titulo";
@@ -23,8 +24,10 @@ public class Libro {
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder();
-        cadena.append("libro: ").append(getTitulo()).append(", fecha de publicación: ").append(isNull(getFechaPublicacion(), "sin fecha"))
-                .append(", autor: ").append(isNull(getAutor(), "sin autor")).append(", isbn: ").append(getIsbn())
+        cadena.append("libro: ").append(getTitulo()).append(", fecha de publicación: ")
+                .append(isNull(getFechaPublicacion(), "sin fecha"))
+                .append(", autor: ").append(isNull(getAutor(), "sin autor"))
+                .append(", isbn: ").append(getIsbn())
                 .append(", formato: ").append(getFormato()).append(", edición: ").append(getEdicion());
         return cadena.toString();
     }
@@ -50,13 +53,15 @@ public class Libro {
     }
 
     public boolean mismoLibro(Libro otroLibro) {
-        boolean mismoIsbn = getIsbn() == otroLibro.getIsbn();
-        boolean mismoAutor = Objects.equals(getAutor(), otroLibro.getAutor());
-        boolean mismaFechaPublicacion = Objects.equals(getFechaPublicacion(), otroLibro.getFechaPublicacion());
-        boolean mismaEdicion = getEdicion() == otroLibro.getEdicion();
-        boolean mismoTitulo = getTitulo().equals(otroLibro.getTitulo());
-        boolean mismoFormato = getFormato().equals(otroLibro.getFormato());
-        return mismoIsbn && mismoAutor && mismaFechaPublicacion && mismaEdicion && mismoTitulo && mismoFormato;
+        if (equals(otroLibro)) {
+            boolean mismoAutor = Objects.equals(getAutor(), otroLibro.getAutor());
+            boolean mismaFechaPublicacion = Objects.equals(getFechaPublicacion(), otroLibro.getFechaPublicacion());
+            boolean mismaEdicion = getEdicion() == otroLibro.getEdicion();
+            boolean mismoTitulo = getTitulo().equals(otroLibro.getTitulo());
+            boolean mismoFormato = getFormato().equals(otroLibro.getFormato());
+            return mismoAutor && mismaFechaPublicacion && mismaEdicion && mismoTitulo && mismoFormato;
+        }
+        return false;
     }
 
     public String getFormato() {
@@ -67,12 +72,22 @@ public class Libro {
         return edicion;
     }
 
+    public void setCopias(int copias) {
+        this.copias += copias;
+    }
+
+    public int getCopias() {
+        return copias;
+    }
+
+    public boolean quedanCopias() {
+        return getCopias() > 0;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (this != null && obj != null) {
-            if (obj instanceof Libro otroLibro) {
-                return getIsbn() == otroLibro.getIsbn();
-            }
+        if (obj != null && obj instanceof Libro otroLibro) {
+            return getIsbn() == otroLibro.getIsbn();
         }
         return false;
     }

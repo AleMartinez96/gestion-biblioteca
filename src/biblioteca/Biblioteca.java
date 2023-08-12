@@ -17,16 +17,26 @@ public class Biblioteca {
 
     public void prestarLibro(Libro libro) {
         if (libro != null && libros.estaElLibro(libro)) {
-            String nombre = JOptionPane.showInputDialog("Ingrese el nombre");
-            Usuario usuario = new Usuario(nombre, clave);
-            usuario.agregarLibro(libro);
-            usuarios.put(usuario.getCodigo(), usuario);
-            libros.eliminarLibro(libro);
-            clave++;
-            System.out.println("El libro fue prestado al usuario " + usuario.getNombre());
+            actualizarDatos(libro);
         } else {
             System.out.println("No se encontro el libro");
         }
+    }
+
+    private void actualizarDatos(Libro libro) {
+        if (libro.quedanCopias()) {
+            agregarUsuario(libro);
+            clave++;
+        }
+        this.libros.prestarLibro(libro);
+        actualizarBiblioteca();
+    }
+
+    private void agregarUsuario(Libro libro) {
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre");
+        Usuario usuario = new Usuario(nombre, clave);
+        usuario.agregarLibro(libro);
+        this.usuarios.put(usuario.getCodigo(), usuario);
     }
 
     public String mostrarBiblioteca() {
@@ -42,6 +52,10 @@ public class Biblioteca {
             return cadena.toString();
         }
         return "Lista vacia";
+    }
+
+    private void actualizarBiblioteca() {
+        libros.actualizarLista();
     }
 
 }

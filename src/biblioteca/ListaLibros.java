@@ -1,6 +1,7 @@
 package biblioteca;
 
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class ListaLibros {
 
@@ -15,8 +16,7 @@ public class ListaLibros {
         if (!libros.isEmpty()) {
             StringBuilder cadena = new StringBuilder();
             for (Map.Entry<Long, Libro> libro : libros.entrySet()) {
-                Libro l = libro.getValue();
-                cadena.append(l).append("\n");
+                cadena.append(libro.getValue()).append(", copias: ").append(libro.getValue().getCopias()).append("\n");
             }
             return cadena.toString();
         }
@@ -25,6 +25,7 @@ public class ListaLibros {
 
     public void agregarLibro(Libro libro) {
         if (libro != null) {
+            libro.setCopias(numeroCopias());
             this.libros.put(libro.getIsbn(), libro);
             System.out.println("Libro agregado con exito");
         } else {
@@ -32,12 +33,41 @@ public class ListaLibros {
         }
     }
 
-    public void eliminarLibro(Libro libro) {
+    private int numeroCopias() {
+        int copias = Integer.parseInt(JOptionPane.showInputDialog("Número de copias"));
+        if (copias > 0) {
+            return copias;
+        }
+        return numeroCopias();
+    }
+
+    public void prestarLibro(Libro libro) {
         if (libro != null && libros.containsKey(libro.getIsbn())) {
-            this.libros.remove(libro.getIsbn());
-            System.out.println("El libro fue eliminado con exito");
+            actualizarStock(libro);
         } else {
             System.out.println("No se encontro el libro");
+        }
+    }
+
+    public void actualizarLista() {
+        Iterator<Map.Entry<Long, Libro>> iterador = libros.entrySet().iterator();
+        while (iterador.hasNext()) {
+            Map.Entry<Long, Libro> lista = iterador.next();
+            Libro libro = lista.getValue();
+            if (libro.getCopias() == 0) {
+                iterador.remove();
+            }
+        }
+
+    }
+
+    private void actualizarStock(Libro libro) {
+        if (libro.quedanCopias()) {
+            libro.setCopias(- 1);
+            System.out.println("El libro " + libro.getTitulo() + " fue prestado");
+        } else {
+            System.out.println("No quedan copias del libro " + libro.getTitulo());
+            libros.remove(libro.getIsbn());
         }
     }
 

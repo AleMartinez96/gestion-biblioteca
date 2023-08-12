@@ -17,11 +17,14 @@ public class Main {
         lista.agregarLibro(libro3);
         lista.agregarLibro(null);
 
-        Biblioteca b = new Biblioteca(lista);
-        b.prestarLibro(null);
+        Biblioteca b = new Biblioteca(null);
+        b.prestarLibro(libro1);
 
         System.out.println(b.mostrarBiblioteca());
+//        System.out.println(b.mostrarUsuarios());
+        b.prestarLibro(null);
+        b.prestarLibro(libro2);
         System.out.println(b.mostrarUsuarios());
-
+        System.out.println(b.mostrarBiblioteca());
     }
 }

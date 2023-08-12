@@ -35,10 +35,8 @@ public class Autor {
 
     @Override
     public boolean equals(Object obj) {
-        if (this != null && obj != null) {
-            if (obj instanceof Autor otroAutor) {
-                return getNombre().equals(otroAutor.getNombre());
-            }
+        if (obj != null && obj instanceof Autor otroAutor) {
+            return getNombre().equals(otroAutor.getNombre());
         }
         return false;
     }

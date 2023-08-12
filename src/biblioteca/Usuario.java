@@ -24,7 +24,7 @@ public class Usuario {
             StringBuilder cadena = new StringBuilder();
             int i = 1;
             for (Libro libro : misLibros) {
-                cadena.append(i).append("- ").append(libro).append("\n");
+                cadena.append(i).append("- ").append(libro);
                 i++;
             }
             return cadena.toString();
